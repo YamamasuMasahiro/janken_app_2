@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="css/sample.css">
+    <title>じゃんけん</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>じゃんけん<br>~地下帝国編~</h1>
+    </header>
+
+    <main>
+        <ul>
+            <li id="gu_btn"><img src="img\janken\gu.png" alt="グー"></li>
+            <li id="cho_btn"><img src="img\janken\choki.png" alt="チョキ"></li>
+            <li id="par_btn"><img src="img\janken\par.png" alt="パー"></li>
+        </ul>
+        <div>コンピュータの出した手は？「<span id="pc_hands">なに？</span>」</div>
+        <div id="judgment">
+            結果は…
+        </div>
+        <!-- 勝敗に応じた音声 -->
+        <audio id="sound-lose" preload="auto">
+            <source src="sound/sound-lose.mp3" type="audio/mp3">
+            <source src="sound/sound-lose.wav" type="audio/wav">
+        </audio>
+
+        <audio id="sound-win" preload="auto">
+            <source src="sound/sound-win.mp3" type="audio/mp3">
+            <source src="sound/sound-win.wav" type="audio/wav">
+        </audio>
+
+        <audio id="sound-hikiwake" preload="auto">
+            <source src="sound/sound-hikiwake.mp3" type="audio/mp3">
+            <source src="sound/sound-hikiwake.wav" type="audio/wav">
+        </audio>
+        
+        <div class="btn-area">
+            <button href="#" class="button-fill" id="reset">借金をチャラにする？</button>
+        </div>
+
+        <div id="scoreBoard">コンピューター:0ペリカ<br>あなた:0ペリカ</div>
+    </main>
+
+    <footer></footer>
+
+
+    <!-- 以下、JavaScript -->
+    <script>
+
+        let count = {
+            pc: 0,
+            you: 0,
+        }
+    // 1．乱数を生成(1~3を生成) 
+    function rand(){
+        var num = Math.floor(Math.random() * 3 + 1);
+        return num;
+    }
+
+    // 音声の再生用の関数を作成
+        // 勝ちの場合
+        function win_sound() {
+            document.querySelector("#sound-win").play();
+        }
+        // 引き分けの場合
+        function hikiwake_sound() {
+            document.querySelector("#sound-hikiwake").play();
+        }
+        // 負けの場合
+        function lose_sound() {
+            document.querySelector("#sound-lose").play();
+        }
+
+    // 2．各ボタンが押された場合のアクションを条件分岐で表現
+    let pc_hands = document.querySelector("#pc_hands");
+    let judgment = document.querySelector("#judgment");
+    let scoreBoard = document.querySelector("#scoreBoard");
+
+    // // リセットボタンの関数を設定
+    // $("#reset").on("click", function(){
+    //     count["pc"] = 0;
+    //     count["you"] = 0;
+    // });
+
+    // 2－1．グーの場合
+    let gu_btn = document.querySelector("#gu_btn");
+    gu_btn.onclick = function(){
+        let cmphand = rand();
+        // コンピューターがグー
+        if(cmphand == 1){
+            pc_hands.innerHTML = "コンピューター:グー";
+            judgment.innerHTML = '<img src=\"img/janken/hikiwake.jpg\">';
+            hikiwake_sound();
+        }
+
+        // コンピューターがチョキ
+        if(cmphand == 2){
+            pc_hands.innerHTML = "コンピューター:チョキ";
+            judgment.innerHTML = '<img src=\"img/janken/win.jpg\">';
+            win_sound();
+            count["you"]++;
+            count["pc"]--;
+        }
+
+        // コンピューターがパー
+        if(cmphand == 3){
+            pc_hands.innerHTML = "コンピューター:パー";
+            judgment.innerHTML = '<img src=\"img/janken/lose.jpg\">';
+            lose_sound();
+            count["pc"]++;
+            count["you"]--;
+        }
+
+        scoreBoard.innerHTML = "コンピューター:" + count["pc"] * 100 + "ペリカ<br>あなた:" + count["you"] * 100 + "ペリカ";
+    }
+
+    // 2－2．チョキの場合
+    let cho_btn = document.querySelector("#cho_btn");
+    cho_btn.onclick = function(){
+        let cmphand = rand();
+        // コンピューターがグー
+        if(cmphand == 1){
+            pc_hands.innerHTML = "コンピューター:グー";
+            judgment.innerHTML = '<img src=\"img/janken/lose.jpg\">';
+            lose_sound();
+            count["pc"]++;
+            count["you"]--;
+        }
+
+        // コンピューターがチョキ
+        if(cmphand == 2){
+            pc_hands.innerHTML = "コンピューター:チョキ";
+            judgment.innerHTML = '<img src=\"img/janken/hikiwake.jpg\">';
+            hikiwake_sound();
+        }
+
+        // コンピューターがパー
+        if(cmphand == 3){
+            pc_hands.innerHTML = "コンピューター:パー";
+            judgment.innerHTML = '<img src=\"img/janken/win.jpg\">';
+            win_sound();
+            count["you"]++;
+            count["pc"]--;
+        }
+
+        scoreBoard.innerHTML = "コンピューター:" + count["pc"] * 100 + "ペリカ<br>あなた   :" + count["you"] * 100 + "ペリカ";
+    }
+        
+
+    // 2－3．パーの場合
+    let par_btn = document.querySelector("#par_btn");
+    par_btn.onclick = function(){
+        let cmphand = rand();
+        // コンピューターがグー
+        if(cmphand == 1){
+            pc_hands.innerHTML = "コンピューター:グー";
+            judgment.innerHTML = '<img src=\"img/janken/win.jpg\">';
+            win_sound();
+            count["you"]++;
+            count["pc"]--;
+        }
+
+        // コンピューターがチョキ
+        if(cmphand == 2){
+            pc_hands.innerHTML = "コンピューター:チョキ";
+            judgment.innerHTML = '<img src=\"img/janken/lose.jpg\">';
+            lose_sound();
+            count["pc"]++;
+            count["you"]--;
+        }
+
+        // コンピューターがパー
+        if(cmphand == 3){
+            pc_hands.innerHTML = "コンピューター:パー";
+            judgment.innerHTML = '<img src=\"img/janken/hikiwake.jpg\">';
+            hikiwake_sound();
+        }
+
+        scoreBoard.innerHTML = "コンピューター:" + count["pc"] * 100 + "ペリカ<br>あなた   :" + count["you"] * 100 + "ペリカ";
+    }
+        
+
+
+
+    </script>
+</body>
+
+</html>
